@@ -1,6 +1,6 @@
 {
   "name": "uupaa.adts.js",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "ADTS parser",
   "url": "https://github.com/uupaa/ADTS.js",
   "keywords": ["ADTS", "AAC", "uupaa", "WebModule", "Unstable"],
@@ -67,9 +67,9 @@
     }
   },
   "dependencies": {
-    "uupaa.bit.js": ""
   },
   "devDependencies": {
+    "uupaa.webaudio.js": "",
     "uupaa.fileloader.js": ""
   },
   "lib": "./lib/",

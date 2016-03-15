@@ -19,8 +19,6 @@ onmessage = function(event) {
     WebModule.publish = true;
 
     importScripts("../../node_modules/uupaa.fileloader.js/lib/FileLoader.js");
-    importScripts("../../node_modules/uupaa.bit.js/lib/Bit.js");
-    importScripts("../../node_modules/uupaa.bit.js/lib/BitView.js");
     importScripts("../wmtools.js");
     importScripts("../../lib/ADTS.js");
     importScripts("../../release/ADTS.w.min.js");
