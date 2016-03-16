@@ -1,6 +1,6 @@
 {
   "name": "uupaa.adts.js",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "ADTS parser",
   "url": "https://github.com/uupaa/ADTS.js",
   "keywords": ["ADTS", "AAC", "uupaa", "WebModule", "Unstable"],
