@@ -67,6 +67,7 @@
     }
   },
   "dependencies": {
+    "uupaa.hash.js": ""
   },
   "devDependencies": {
     "uupaa.webaudio.js": "",
