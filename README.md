@@ -2,7 +2,7 @@
 
 [![npm](https://nodei.co/npm/uupaa.adts.js.svg?downloads=true&stars=true)](https://nodei.co/npm/uupaa.adts.js/)
 
-ADTS parser
+ADTS parser.
 
 This module made of [WebModule](https://github.com/uupaa/WebModule).
 
@@ -16,7 +16,10 @@ This module made of [WebModule](https://github.com/uupaa/WebModule).
 <script src="<module-dir>/lib/WebModule.js"></script>
 <script src="<module-dir>/lib/ADTS.js"></script>
 <script>
-    ...
+var stream = new Uint8Array(...);
+var aacMetaData = ADTS.parse(stream);
+
+console.log( aacMetaData.duration );  // -> 5.410249433106576
 </script>
 ```
 
