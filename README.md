@@ -17,25 +17,25 @@ This module made of [WebModule](https://github.com/uupaa/WebModule).
 <script src="<module-dir>/lib/ADTS.js"></script>
 <script>
 var stream = new Uint8Array(...);
-var aacMetaData = ADTS.parse(stream);
+var audioMetaData = ADTS.parse(stream);
 
-console.log( aacMetaData.duration );  // -> 5.410249433106576
+console.log( audioMetaData.duration );  // -> 5.410249433106576
 </script>
 ```
 
 ## WebWorkers
 
 ```js
-importScripts("<module-dir>lib/WebModule.js");
-importScripts("<module-dir>lib/ADTS.js");
+importScripts("<module-dir>/lib/WebModule.js");
+importScripts("<module-dir>/lib/ADTS.js");
 
 ```
 
 ## Node.js
 
 ```js
-require("<module-dir>lib/WebModule.js");
-require("<module-dir>lib/ADTS.js");
+require("<module-dir>/lib/WebModule.js");
+require("<module-dir>/lib/ADTS.js");
 
 ```
 

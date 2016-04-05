@@ -31,11 +31,11 @@ function testADTS_structure_verification(test, pass, miss) {
         FileLoader.toArrayBuffer(sourceFile, function(arrayBuffer) {
 
             // get AAC duration
-            var byteStream = new Uint8Array(arrayBuffer);
-            var metaData   = ADTS.parse(byteStream);
-            var audioBlob = ADTS.toBlob(byteStream, 0, 32);
+            var byteStream    = new Uint8Array(arrayBuffer);
+            var audioMetaData = ADTS.parse(byteStream);
+            var audioBlob     = ADTS.toBlob(byteStream, 0, 32);
 
-            console.log("AAC duration", metaData.duration);
+            console.log("AAC duration", audioMetaData.duration);
 
             //var audioBlob = new Blob([arrayBuffer], { type: "audio/aac" });
             FileLoader.toArrayBuffer(audioBlob, function(arrayBuffer) {
