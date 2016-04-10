@@ -1,12 +1,12 @@
 {
-  "name": "uupaa.adts.js",
-  "version": "0.0.8",
-  "description": "ADTS parser.",
-  "url": "https://github.com/uupaa/ADTS.js",
-  "keywords": ["ADTS", "AAC", "uupaa", "WebModule", "Unstable"],
+  "name": "uupaa.aac.js",
+  "version": "0.0.9",
+  "description": "AAC parser.",
+  "url": "https://github.com/uupaa/AAC.js",
+  "keywords": ["AAC", "ADTS", "uupaa", "WebModule", "Unstable"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/uupaa/ADTS.js.git"
+    "url": "https://github.com/uupaa/AAC.js.git"
   },
   "scripts": {
     "sync": "node ../WebModule/run/sync.js; npm update; node ../WebModule/run/page.js",
@@ -18,12 +18,12 @@
     "test": "npm run min; npm run node; npm run browser",
     "node": "NODE_ENV=production NODE_PATH=lib node test/node/index.js",
     "noded": "NODE_ENV=production NODE_PATH=lib node --debug-brk test/node/index.js",
-    "browser": "open http://localhost:8000/ADTS.js/test/browser/index.html",
+    "browser": "open http://localhost:8000/AAC.js/test/browser/index.html",
     "el": "electron test/el",
     "nw": "nw test/nw",
     "add-src": "node ../WebModule/run/add-src.js",
     "add-subclass": "node ../WebModule/run/add-subclass.js",
-    "sim": "node ../WebModule/run/sim.js http://localhost:8000/ADTS.js/test/browser/index.html",
+    "sim": "node ../WebModule/run/sim.js http://localhost:8000/AAC.js/test/browser/index.html",
     "simx": "node ../WebModule/run/sim.js stop",
     "lint": "eslint lib/*.js",
     "score": "node ../WebModule/run/score.js; open lint/plato/index.html",
@@ -36,38 +36,44 @@
     "develop": false,
     "label": ["@dev"],
     "browser": {
-      "output": "release/ADTS.b.min.js",
+      "output": "release/AAC.b.min.js",
       "source": [
-        "lib/ADTS.js"
+        "lib/ADTS.js",
+        "lib/AAC.js"
       ]
     },
     "worker": {
-      "output": "release/ADTS.w.min.js",
+      "output": "release/AAC.w.min.js",
       "source": [
-        "lib/ADTS.js"
+        "lib/ADTS.js",
+        "lib/AAC.js"
       ]
     },
     "node": {
-      "output": "release/ADTS.n.min.js",
+      "output": "release/AAC.n.min.js",
       "source": [
-        "lib/ADTS.js"
+        "lib/ADTS.js",
+        "lib/AAC.js"
       ]
     },
     "nw": {
-      "output": "release/ADTS.nw.min.js",
+      "output": "release/AAC.nw.min.js",
       "source": [
-        "lib/ADTS.js"
+        "lib/ADTS.js",
+        "lib/AAC.js"
       ]
     },
     "el": {
-      "output": "release/ADTS.el.min.js",
+      "output": "release/AAC.el.min.js",
       "source": [
-        "lib/ADTS.js"
+        "lib/ADTS.js",
+        "lib/AAC.js"
       ]
     }
   },
   "dependencies": {
-    "uupaa.hash.js": ""
+    "uupaa.hash.js": "",
+    "uupaa.bit.js": ""
   },
   "devDependencies": {
     "uupaa.webaudio.js": "",

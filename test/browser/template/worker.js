@@ -1,4 +1,4 @@
-// ADTS test
+// AAC test
 
 onmessage = function(event) {
     self.unitTest = event.data; // { message, setting: { secondary, baseDir } }

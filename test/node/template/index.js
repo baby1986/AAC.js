@@ -1,4 +1,4 @@
-// ADTS test
+// AAC test
 
 require("../../lib/WebModule.js");
 

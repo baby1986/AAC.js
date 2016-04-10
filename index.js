@@ -1,3 +1,3 @@
-//module.exports = require("./bin/ADTS");
-module.exports = require("./lib/ADTS");
+//module.exports = require("./bin/AAC");
+module.exports = require("./lib/AAC");
 

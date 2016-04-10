@@ -1,4 +1,4 @@
-// ADTS test
+// AAC test
 
 onmessage = function(event) {
     self.unitTest = event.data; // { message, setting: { secondary, baseDir } }
@@ -24,7 +24,8 @@ onmessage = function(event) {
     importScripts("../../node_modules/uupaa.hash.js/lib/Hash.js");
     importScripts("../wmtools.js");
     importScripts("../../lib/ADTS.js");
-    importScripts("../../release/ADTS.w.min.js");
+    importScripts("../../lib/AAC.js");
+    importScripts("../../release/AAC.w.min.js");
     importScripts("../testcase.js");
 
     self.postMessage(self.unitTest);

@@ -1,6 +1,6 @@
 var ModuleTestADTS = (function(global) {
 
-var test = new Test(["ADTS"], { // Add the ModuleName to be tested here (if necessary).
+var test = new Test(["AAC"], { // Add the ModuleName to be tested here (if necessary).
         disable:    false, // disable all tests.
         browser:    true,  // enable browser test.
         worker:     false,  // enable worker test.
@@ -19,13 +19,13 @@ var test = new Test(["ADTS"], { // Add the ModuleName to be tested here (if nece
 
 if (IN_BROWSER || IN_NW || IN_EL) {
     test.add([
-        testADTS_structure_verification,
+        testAAC_AAC_LC_parse,
     ]);
 }
 
 // --- test cases ------------------------------------------
-function testADTS_structure_verification(test, pass, miss) {
-    var sourceFile = "../assets/a000.aac";
+function testAAC_AAC_LC_parse(test, pass, miss) {
+    var sourceFile = "../assets/AAC-LC.aac";
 
     WebAudio.init(function(audioContext) { // @arg PlayableAudioContext
         FileLoader.toArrayBuffer(sourceFile, function(arrayBuffer) {

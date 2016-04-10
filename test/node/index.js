@@ -1,4 +1,4 @@
-// ADTS test
+// AAC test
 
 require("../../lib/WebModule.js");
 
@@ -12,6 +12,7 @@ require("../../node_modules/uupaa.hash.js/node_modules/uupaa.bit.js/lib/BitView.
 require("../../node_modules/uupaa.hash.js/lib/Hash.js");
 require("../wmtools.js");
 require("../../lib/ADTS.js");
-require("../../release/ADTS.n.min.js");
+require("../../lib/AAC.js");
+require("../../release/AAC.n.min.js");
 require("../testcase.js");
 
