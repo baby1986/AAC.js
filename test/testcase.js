@@ -27,6 +27,9 @@ if (IN_BROWSER || IN_NW || IN_EL) {
 function testAAC_AAC_LC_parse(test, pass, miss) {
     var sourceFile = "../assets/AAC-LC.aac";
 
+    //document.body.onclick = _run;
+    //document.body.ontouchstart = _run;
+
     WebAudio.init(function(audioContext) { // @arg PlayableAudioContext
         FileLoader.toArrayBuffer(sourceFile, function(arrayBuffer) {
 
@@ -65,7 +68,7 @@ function testAAC_AAC_LC_parse(test, pass, miss) {
             console.error(error.message);
             test.done(miss());
         });
-    });
+    }, document.body);
 }
 
 return test.run();
