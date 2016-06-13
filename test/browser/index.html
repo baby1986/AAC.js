@@ -9,10 +9,15 @@ WebModule.VERBOSE = true;
 WebModule.PUBLISH = true;
 </script>
 
+<script src="../../node_modules/uupaa.task.js/lib/Task.js"></script>
+<script src="../../node_modules/uupaa.task.js/lib/TaskMap.js"></script>
 <script src="../../node_modules/uupaa.webaudio.js/lib/WebAudio.js"></script>
+<script src="../../node_modules/uupaa.fileloader.js/node_modules/uupaa.uri.js/lib/URI.js"></script>
+<script src="../../node_modules/uupaa.fileloader.js/node_modules/uupaa.uri.js/lib/URISearchParams.js"></script>
 <script src="../../node_modules/uupaa.fileloader.js/lib/FileLoader.js"></script>
-<script src="../../node_modules/uupaa.hash.js/node_modules/uupaa.bit.js/lib/Bit.js"></script>
-<script src="../../node_modules/uupaa.hash.js/node_modules/uupaa.bit.js/lib/BitView.js"></script>
+<script src="../../node_modules/uupaa.fileloader.js/lib/FileLoaderQueue.js"></script>
+<script src="../../node_modules/uupaa.bit.js/lib/Bit.js"></script>
+<script src="../../node_modules/uupaa.bit.js/lib/BitView.js"></script>
 <script src="../../node_modules/uupaa.hash.js/lib/Hash.js"></script>
 <script src="../wmtools.js"></script>
 <script src="../../lib/ADTS.js"></script>
@@ -20,10 +25,149 @@ WebModule.PUBLISH = true;
 <script src="../../release/AAC.b.min.js"></script>
 <script src="../testcase.js"></script>
 
-<p> click me </p>
-<p> click me </p>
-<p> click me </p>
-<p> click me </p>
+<input type="button" value="AAC-LC" onclick="playAAC()" disabled></input>
+<input type="button" value="HE-AAC" onclick="playV2()" disabled></input>
+
+<p>Touch the below text.</p>
+<br>
+Lorem ipsum dolor sit amet, illum dictas interpretaris an per. His labore deserunt eleifend ex. Pro ut ignota democritum, eos bonorum moderatius interpretaris no. An offendit salutatus vulputate quo, omnis reque definitionem ex usu, ad sed velit ridens fabellas.
+
+Imperdiet persecuti duo te, his ei iriure appetere. Mea eu lorem admodum invenire. Ne sea audire dolorum fierent, quot paulo sit at, eos enim latine convenire an. Omnis congue est ad, ei qui numquam molestie, vis vitae deterruisset et. An adhuc scriptorem pri, unum indoctum sapientem nec ex, ei duo clita diceret rationibus.
+
+Congue tation mediocrem no his. Per fugit propriae officiis an, postulant elaboraret scribentur nam ut. Duis laboramus gloriatur an has, eos corpora accusamus cotidieque in, ex omnes erroribus usu. Ei dicunt consequuntur mel, sed ea numquam nonumes senserit. Ad probo prima intellegebat quo, duo cu invenire hendrerit torquatos. Munere postulant ea usu, ei timeam pertinax argumentum vel.
+
+Vix te erant tacimates scripserit, cu congue intellegat usu, ius esse tamquam necessitatibus ei. Vel ut inani suscipit. Ad aeque maluisset eum, ne his mutat postea invenire. Ea sed qualisque democritum. Nec tibique quaestio consequat in, possit salutatus dissentiunt ei per.
+
+Mei scaevola conclusionemque id, iudico aperiri placerat qui te, nec omnium vituperata ea. Probo justo omittantur vim id, luptatum apeirian incorrupte et eos, dicat pertinax an qui. Ignota utamur definitionem quo ad, et error graece civibus mel, meis dolorum id mel. Pro alia oblique expetendis eu.
+</p>
+
+<script>
+/*
+var AudioContext = window["AudioContext"]       ||       // [Chrome][Firefox][Edge]
+                   window["webkitAudioContext"] || null; // [iOS Safari 6+]
+var audioContext = new AudioContext();
+ */
+var audioContext = null;
+
+window.onload = function() {
+    WebAudio.init(function() {
+        if (WebAudio.ready) {
+            audioContext = WebAudio.getContext();
+            document.body.style.backgroundColor = "lime";
+            [].slice.call(document.querySelectorAll("input[type=button]")).forEach(function(node) {
+                node.disabled = false;
+            });
+        } else {
+            alert("WebAudio not function");
+        }
+    }, document.body);
+};
+
+function playAAC() {
+    var files = [
+/*
+            "../../assets/AAC-LC000.aac",
+            "../../assets/AAC-LC001.aac",
+            "../../assets/AAC-LC002.aac",
+            "../../assets/AAC-LC003.aac",
+            "../../assets/AAC-LC004.aac",
+            "../../assets/AAC-LC005.aac",
+            "../../assets/AAC-LC006.aac",
+            "../../assets/AAC-LC007.aac",
+            "../../assets/AAC-LC008.aac",
+            "../../assets/AAC-LC009.aac",
+ */
+            "../assets/v0.aac",
+        ];
+    _play(files);
+}
+function playV2() {
+    var files = [
+/*
+            "../../assets/HE-AAC000.aac",
+            "../../assets/HE-AAC001.aac",
+            "../../assets/HE-AAC002.aac",
+            "../../assets/HE-AAC003.aac",
+            "../../assets/HE-AAC004.aac",
+            "../../assets/HE-AAC005.aac",
+            "../../assets/HE-AAC006.aac",
+            "../../assets/HE-AAC007.aac",
+            "../../assets/HE-AAC008.aac",
+            "../../assets/HE-AAC009.aac",
+ */
+            "../assets/v2.aac",
+        ];
+    _play(files);
+}
+
+function _play(files) {
+    _toAudioBuffer(files, function(buffer) { // [ArrayBuffer, ...]
+        var when = 0.2;
+
+        buffer.forEach(function(audioBuffer, index, array) {
+            var source = audioContext.createBufferSource();
+
+            source.buffer = audioBuffer;
+            source.connect(audioContext.destination);
+            source.start(when);
+            console.log(when, audioBuffer.duration);
+
+            when += audioBuffer.duration;
+        });
+
+/*
+        var channels = 2;
+        // extend duration
+        buffer.forEach(function(pcmAudioBuffer, index, array) {
+            var frameCount  = (pcmAudioBuffer.duration + 2) * audioContext.sampleRate; // +2 sec
+            var customArrayBuffer = audioContext.createBuffer(channels, frameCount, audioContext.sampleRate);
+
+            customArrayBuffer["copyToChannel"](pcmAudioBuffer["getChannelData"](0), 0);
+            customArrayBuffer["copyToChannel"](pcmAudioBuffer["getChannelData"](1), 1);
+
+            var source = audioContext.createBufferSource();
+
+          //source.buffer = pcmAudioBuffer;
+            source.buffer = customArrayBuffer;
+
+            source.connect(audioContext.destination);
+            source.start(when);
+
+            console.log({ when: when, duration: pcmAudioBuffer.duration, next: when + pcmAudioBuffer.duration, customArrayBuffer: customArrayBuffer.duration });
+
+            when += pcmAudioBuffer.duration;
+        });
+ */
+
+    });
+}
+
+function _toAudioBuffer(files, callback) {
+    var task = new Task("AAC loader", files.length, function(error, buffer) {
+            callback(buffer);
+        });
+
+    files.forEach(function(file, index) {
+        console.log(file);
+
+        FileLoader.toArrayBuffer(file, function(arrayBuffer, file) {
+            audioContext.decodeAudioData(arrayBuffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+                console.dir({
+                    duration:   audioBuffer.duration,
+                    length:     audioBuffer.length,
+                    sampleRate: audioBuffer.sampleRate,
+                    numberOfChannels: audioBuffer.numberOfChannels
+                });
+                task.buffer[index] = audioBuffer;
+                task.pass();
+            }, function(error) {
+                console.error("decodeAudioData error", error);
+            });
+        });
+    });
+}
+
+</script>
 
 </body></html>
 

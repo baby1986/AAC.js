@@ -1,6 +1,6 @@
 {
   "name": "uupaa.aac.js",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "AAC parser.",
   "url": "https://github.com/uupaa/AAC.js",
   "keywords": ["AAC", "ADTS", "uupaa", "WebModule", "Unstable"],
@@ -76,6 +76,7 @@
     "uupaa.bit.js": ""
   },
   "devDependencies": {
+    "uupaa.task.js": "",
     "uupaa.webaudio.js": "",
     "uupaa.fileloader.js": ""
   },
