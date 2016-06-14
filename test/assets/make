@@ -1,7 +1,10 @@
 # sin.wav から AAC-LC を作成する
 
-ffmpeg -i sin.wav -acodec libfdk_aac -b:a 48k                      -ar 44100 v0.aac
+ffmpeg -y -i sin.wav -acodec libfdk_aac -b:a 48k                      -ar 44100 v0.aac
+
+# sin.wav から HE-AAC v1 を作成する
+ffmpeg -y -i sin.wav -acodec libfdk_aac -b:a 48k -profile:a aac_he    -ar 44100 v1.aac
 
 # sin.wav から HE-AAC v2 を作成する
-ffmpeg -i sin.wav -acodec libfdk_aac -b:a 48k -profile:a aac_he_v2 -ar 44100 v2.aac
+ffmpeg -y -i sin.wav -acodec libfdk_aac -b:a 48k -profile:a aac_he_v2 -ar 44100 v2.aac
 

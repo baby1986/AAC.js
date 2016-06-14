@@ -99,7 +99,7 @@ function _play(files) {
 
             source.buffer = audioBuffer;
             source.connect(audioContext.destination);
-            source.start(when);
+            source.start(when, 0, 2);
             console.log(when, audioBuffer.duration);
 
             when += audioBuffer.duration;

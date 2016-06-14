@@ -53,7 +53,7 @@ window.onload = function() {
     WebAudio.init(function() {
         if (WebAudio.ready) {
             audioContext = WebAudio.getContext();
-            document.body.style.backgroundColor = "lime";
+            document.body.style.backgroundColor = "lime"; // playable
             [].slice.call(document.querySelectorAll("input[type=button]")).forEach(function(node) {
                 node.disabled = false;
             });
@@ -109,7 +109,7 @@ function _play(files) {
 
             source.buffer = audioBuffer;
             source.connect(audioContext.destination);
-            source.start(when);
+            source.start(when, 0, 2);
             console.log(when, audioBuffer.duration);
 
             when += audioBuffer.duration;
