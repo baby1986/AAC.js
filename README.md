@@ -17,9 +17,9 @@ This module made of [WebModule](https://github.com/uupaa/WebModule).
 <script src="<module-dir>/lib/AAC.js"></script>
 <script>
 var stream = new Uint8Array(...);
-var audioMetaData = AAC.parse(stream);
+var adts = AAC.parse(stream);
 
-console.log( audioMetaData.duration );  // -> 5.410249433106576
+console.log( adts.duration );  // -> 5.410249433106576
 </script>
 ```
 
