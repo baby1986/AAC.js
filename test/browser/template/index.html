@@ -17,6 +17,7 @@ __TEST_CASE__
 
 <input type="button" value="AAC-LC" onclick="playAAC()" disabled></input>
 <input type="button" value="HE-AAC" onclick="playV2()" disabled></input>
+<input type="button" value="Packing" onclick="playPakings()" disabled></input>
 
 <p>Touch the below text.</p>
 <br>
@@ -55,80 +56,63 @@ window.onload = function() {
 
 function playAAC() {
     var files = [
-/*
-            "../../assets/AAC-LC000.aac",
-            "../../assets/AAC-LC001.aac",
-            "../../assets/AAC-LC002.aac",
-            "../../assets/AAC-LC003.aac",
-            "../../assets/AAC-LC004.aac",
-            "../../assets/AAC-LC005.aac",
-            "../../assets/AAC-LC006.aac",
-            "../../assets/AAC-LC007.aac",
-            "../../assets/AAC-LC008.aac",
-            "../../assets/AAC-LC009.aac",
- */
-            "../assets/v0.aac",
+            "../assets/sin0.aac",
         ];
     _play(files);
 }
 function playV2() {
     var files = [
-/*
-            "../../assets/HE-AAC000.aac",
-            "../../assets/HE-AAC001.aac",
-            "../../assets/HE-AAC002.aac",
-            "../../assets/HE-AAC003.aac",
-            "../../assets/HE-AAC004.aac",
-            "../../assets/HE-AAC005.aac",
-            "../../assets/HE-AAC006.aac",
-            "../../assets/HE-AAC007.aac",
-            "../../assets/HE-AAC008.aac",
-            "../../assets/HE-AAC009.aac",
- */
-            "../assets/v2.aac",
+            "../assets/sin2.aac",
         ];
     _play(files);
 }
 
+function playPakings() {
+    audioContext.decodeAudioData(ADTS.PACKING_A.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+        var source = audioContext.createBufferSource();
+        var pcm = audioBuffer.getChannelData(0);
+
+        source.buffer = audioBuffer;
+        source.connect(audioContext.destination);
+        source.loop = true;
+        source.start(0);
+
+        audioContext.decodeAudioData(ADTS.PACKING_B.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+
+            var source = audioContext.createBufferSource();
+            var pcm = audioBuffer.getChannelData(0);
+
+            source.buffer = audioBuffer;
+            source.connect(audioContext.destination);
+            source.loop = true;
+            source.start(0);
+
+            audioContext.decodeAudioData(ADTS.PACKING_C.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+
+                var source = audioContext.createBufferSource();
+                var pcm = audioBuffer.getChannelData(0);
+
+                source.buffer = audioBuffer;
+                source.connect(audioContext.destination);
+                source.loop = true;
+                source.start(0);
+            });
+        });
+    });
+}
+
 function _play(files) {
     _toAudioBuffer(files, function(buffer) { // [ArrayBuffer, ...]
-        var when = 0.2;
 
         buffer.forEach(function(audioBuffer, index, array) {
             var source = audioContext.createBufferSource();
 
             source.buffer = audioBuffer;
             source.connect(audioContext.destination);
-            source.start(when, 0, 2);
-            console.log(when, audioBuffer.duration);
+            source.start(0);
 
             when += audioBuffer.duration;
         });
-
-/*
-        var channels = 2;
-        // extend duration
-        buffer.forEach(function(pcmAudioBuffer, index, array) {
-            var frameCount  = (pcmAudioBuffer.duration + 2) * audioContext.sampleRate; // +2 sec
-            var customArrayBuffer = audioContext.createBuffer(channels, frameCount, audioContext.sampleRate);
-
-            customArrayBuffer["copyToChannel"](pcmAudioBuffer["getChannelData"](0), 0);
-            customArrayBuffer["copyToChannel"](pcmAudioBuffer["getChannelData"](1), 1);
-
-            var source = audioContext.createBufferSource();
-
-          //source.buffer = pcmAudioBuffer;
-            source.buffer = customArrayBuffer;
-
-            source.connect(audioContext.destination);
-            source.start(when);
-
-            console.log({ when: when, duration: pcmAudioBuffer.duration, next: when + pcmAudioBuffer.duration, customArrayBuffer: customArrayBuffer.duration });
-
-            when += pcmAudioBuffer.duration;
-        });
- */
-
     });
 }
 
@@ -143,9 +127,9 @@ function _toAudioBuffer(files, callback) {
         FileLoader.toArrayBuffer(file, function(arrayBuffer, file) {
             audioContext.decodeAudioData(arrayBuffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
                 console.dir({
-                    duration:   audioBuffer.duration,
-                    length:     audioBuffer.length,
-                    sampleRate: audioBuffer.sampleRate,
+                    duration:         audioBuffer.duration,
+                    length:           audioBuffer.length,
+                    sampleRate:       audioBuffer.sampleRate,
                     numberOfChannels: audioBuffer.numberOfChannels
                 });
                 task.buffer[index] = audioBuffer;

@@ -35,6 +35,8 @@ function testAAC_PACKING_A(test, pass, miss) {
     console.dir(adts);
     console.dir(f0);
 
+    var audioContext = new AudioContext();
+
     if (adts.errorBytes === 0 && f0.error === false) {
         if (adts.duration) {
             if (adts.frames.length === 2) {
@@ -47,7 +49,21 @@ function testAAC_PACKING_A(test, pass, miss) {
                                         if (f0.adtsHeaderLength === 7) {
                                             if (f0.crcLength === 0) {
                                                 if (f0.rawDataBlockLength === 139 - 7) {
-                                                    test.done(pass());
+                                                    audioContext.decodeAudioData(ADTS.PACKING_A.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+                                                        var pcm = audioBuffer.getChannelData(0); // Float32Array(2048)
+
+                                                        if (pcm.length === 2048) {
+                                                            if (Math.max.apply(null, pcm) === 0) {
+                                                                if (Math.min.apply(null, pcm) === 0) {
+                                                                    test.done(pass());
+                                                                    return;
+                                                                }
+                                                            }
+                                                        }
+                                                        test.done(miss());
+                                                    }, function(error) {
+                                                        test.done(miss());
+                                                    });
                                                     return;
                                                 }
                                             }
@@ -71,6 +87,8 @@ function testAAC_PACKING_B(test, pass, miss) {
     console.dir(adts);
     console.dir(f0);
 
+    var audioContext = new AudioContext();
+
     if (adts.errorBytes === 0 && f0.error === false) {
         if (adts.duration) {
             if (adts.frames.length === 1) {
@@ -83,7 +101,21 @@ function testAAC_PACKING_B(test, pass, miss) {
                                         if (f0.adtsHeaderLength === 7) {
                                             if (f0.crcLength === 0) {
                                                 if (f0.rawDataBlockLength === 278 - 7) {
-                                                    test.done(pass());
+                                                    audioContext.decodeAudioData(ADTS.PACKING_B.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+                                                        var pcm = audioBuffer.getChannelData(0); // Float32Array(2048)
+                                                        var max = Math.max.apply(null, pcm);
+                                                        var min = Math.min.apply(null, pcm);
+
+                                                        if (pcm.length === 2048) {
+                                                            if (max <= 1 && min >= -1) {
+                                                                test.done(pass());
+                                                                return;
+                                                            }
+                                                        }
+                                                        test.done(miss());
+                                                    }, function(error) {
+                                                        test.done(miss());
+                                                    });
                                                     return;
                                                 }
                                             }
@@ -120,7 +152,21 @@ function testAAC_PACKING_C(test, pass, miss) {
                                         if (f0.adtsHeaderLength === 7) {
                                             if (f0.crcLength === 0) {
                                                 if (f0.rawDataBlockLength === 278 - 7) {
-                                                    test.done(pass());
+                                                    audioContext.decodeAudioData(ADTS.PACKING_C.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+                                                        var pcm = audioBuffer.getChannelData(0); // Float32Array(2048)
+                                                        var max = Math.max.apply(null, pcm);
+                                                        var min = Math.min.apply(null, pcm);
+
+                                                        if (pcm.length === 2048) {
+                                                            if (max <= 1 && min >= -1) {
+                                                                test.done(pass());
+                                                                return;
+                                                            }
+                                                        }
+                                                        test.done(miss());
+                                                    }, function(error) {
+                                                        test.done(miss());
+                                                    });
                                                     return;
                                                 }
                                             }
@@ -139,7 +185,7 @@ function testAAC_PACKING_C(test, pass, miss) {
 
 
 function testAAC_AAC_LC_parse(test, pass, miss) {
-    var file = "../assets/v0.aac";
+    var file = "../assets/sin0.aac";
 
     FileLoader.toArrayBuffer(file, function(arrayBuffer) {
 
@@ -207,7 +253,7 @@ function testAAC_AAC_LC_parse(test, pass, miss) {
 }
 
 function testAAC_toBlob(test, pass, miss) {
-    var file = "../assets/v2.aac";
+    var file = "../assets/sin2.aac";
 
     FileLoader.toArrayBuffer(file, function(arrayBuffer) {
 
