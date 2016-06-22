@@ -19,23 +19,23 @@ var test = new Test(["AAC"], { // Add the ModuleName to be tested here (if neces
 
 if (IN_BROWSER || IN_NW || IN_EL) {
     test.add([
-        testAAC_PACKING_A,
-        testAAC_PACKING_B,
-        testAAC_PACKING_C,
+        testAAC_AAC_44100_LR_2,
+        testAAC_AAC_44100_LR_5,
+        testAAC_AAC_44100_LR_29,
         testAAC_AAC_LC_parse,
         testAAC_toBlob,
     ]);
 }
 
 // --- test cases ------------------------------------------
-function testAAC_PACKING_A(test, pass, miss) {
-    var adts = ADTS.parse(ADTS.PACKING_A);
+function testAAC_AAC_44100_LR_2(test, pass, miss) {
+    var adts = ADTS.parse(AAC.AAC_44100_LR_2);
     var f0   = adts.frames[0];
 
     console.dir(adts);
     console.dir(f0);
 
-    var audioContext = new AudioContext();
+    var audioContext = global["AudioContext"] ? new AudioContext() : new webkitAudioContext();
 
     if (adts.errorBytes === 0 && f0.error === false) {
         if (adts.duration) {
@@ -49,7 +49,7 @@ function testAAC_PACKING_A(test, pass, miss) {
                                         if (f0.adtsHeaderLength === 7) {
                                             if (f0.crcLength === 0) {
                                                 if (f0.rawDataBlockLength === 139 - 7) {
-                                                    audioContext.decodeAudioData(ADTS.PACKING_A.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+                                                    audioContext.decodeAudioData(AAC.AAC_44100_LR_2.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
                                                         var pcm = audioBuffer.getChannelData(0); // Float32Array(2048)
 
                                                         if (pcm.length === 2048) {
@@ -80,14 +80,14 @@ function testAAC_PACKING_A(test, pass, miss) {
     test.done(miss());
 }
 
-function testAAC_PACKING_B(test, pass, miss) {
-    var adts = ADTS.parse(ADTS.PACKING_B);
+function testAAC_AAC_44100_LR_5(test, pass, miss) {
+    var adts = ADTS.parse(AAC.AAC_44100_LR_5);
     var f0   = adts.frames[0];
 
     console.dir(adts);
     console.dir(f0);
 
-    var audioContext = new AudioContext();
+    var audioContext = global["AudioContext"] ? new AudioContext() : new webkitAudioContext();
 
     if (adts.errorBytes === 0 && f0.error === false) {
         if (adts.duration) {
@@ -101,7 +101,7 @@ function testAAC_PACKING_B(test, pass, miss) {
                                         if (f0.adtsHeaderLength === 7) {
                                             if (f0.crcLength === 0) {
                                                 if (f0.rawDataBlockLength === 278 - 7) {
-                                                    audioContext.decodeAudioData(ADTS.PACKING_B.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+                                                    audioContext.decodeAudioData(AAC.AAC_44100_LR_5.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
                                                         var pcm = audioBuffer.getChannelData(0); // Float32Array(2048)
                                                         var max = Math.max.apply(null, pcm);
                                                         var min = Math.min.apply(null, pcm);
@@ -133,12 +133,14 @@ function testAAC_PACKING_B(test, pass, miss) {
 }
 
 
-function testAAC_PACKING_C(test, pass, miss) {
-    var adts = ADTS.parse(ADTS.PACKING_C);
+function testAAC_AAC_44100_LR_29(test, pass, miss) {
+    var adts = ADTS.parse(AAC.AAC_44100_LR_29);
     var f0   = adts.frames[0];
 
     console.dir(adts);
     console.dir(f0);
+
+    var audioContext = global["AudioContext"] ? new AudioContext() : new webkitAudioContext();
 
     if (adts.errorBytes === 0 && f0.error === false) {
         if (adts.duration) {
@@ -152,7 +154,7 @@ function testAAC_PACKING_C(test, pass, miss) {
                                         if (f0.adtsHeaderLength === 7) {
                                             if (f0.crcLength === 0) {
                                                 if (f0.rawDataBlockLength === 278 - 7) {
-                                                    audioContext.decodeAudioData(ADTS.PACKING_C.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+                                                    audioContext.decodeAudioData(AAC.AAC_44100_LR_29.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
                                                         var pcm = audioBuffer.getChannelData(0); // Float32Array(2048)
                                                         var max = Math.max.apply(null, pcm);
                                                         var min = Math.min.apply(null, pcm);
@@ -280,47 +282,35 @@ Channel layout: Mono
 Channel layout: Mono
 
  */
+    var audioContext = global["AudioContext"] ? new AudioContext() : new webkitAudioContext();
+
     var audioObjectType    = 29;
-    var packingAACPackets  = 128;
     var aacFrameDuration   = 0.02321995464704;
-    var packingAACDuration = packingAACPackets * aacFrameDuration;
     var primingDuration    = (2112 / 1024) * aacFrameDuration;
 
     FileLoader.toArrayBuffer(file, function(arrayBuffer) {
 
-        var byteStream = new Uint8Array(arrayBuffer);
-        var adts       = ADTS.parse(byteStream);
-        var audioBlob1 = ADTS.toBlob(byteStream, audioObjectType, adts.channels, 0);
-        var audioBlob2 = ADTS.toBlob(byteStream, audioObjectType, adts.channels, packingAACPackets); // add 128 packet
-        var realDuration = adts.duration;
+        var aacBitStream = new Uint8Array(arrayBuffer);
+        var adts         = ADTS.parse(aacBitStream);
+        var blob         = ADTS.toBlob(aacBitStream, adts);
+        var adtsDuration = adts.duration;
 
-        FileLoader.toArrayBuffer(audioBlob1, function(arrayBuffer1) {
-            FileLoader.toArrayBuffer(audioBlob2, function(arrayBuffer2) {
-                audioContext.decodeAudioData(arrayBuffer1, function(audioBuffer1) { // @arg AudioBuffer - PCM data
-                    audioContext.decodeAudioData(arrayBuffer2, function(audioBuffer2) { // @arg AudioBuffer - PCM data
-                        var source = audioContext.createBufferSource();
+        FileLoader.toArrayBuffer(blob, function(arrayBuffer) {
+            audioContext.decodeAudioData(arrayBuffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+                var additionalDuration = audioBuffer.duration;
 
-                        var fakeDuration1 = audioBuffer1.duration;
-                        var fakeDuration2 = audioBuffer2.duration;
+                console.log({ adtsDuration: adtsDuration, additionalDuration: additionalDuration });
 
-                        console.log({ realDuration: realDuration, fakeDuration1: fakeDuration1, fakeDuration2: fakeDuration2 });
+                if ((additionalDuration | 0) >= (adtsDuration | 0)) {
+                    test.done(pass());
+                } else {
+                    test.done(miss());
+                }
 
-                        var d = realDuration + packingAACDuration;
-                        var e = d - primingDuration;
-/* TODO: あとでブラウザ毎に検証
-debugger;
-                        if (fakeDuration2 === realDuration + packingAACDuration) {
-                            test.done(pass());
-                        } else {
-                            test.done(miss());
-                        }
- */
-                            test.done(pass());
-                        // source.buffer = audioBuffer;
-                        // source.connect(audioContext.destination);
-                        // source.start(0, 0, 1);
-                    });
-                });
+                // var source = audioContext.createBufferSource();
+                // source.buffer = audioBuffer;
+                // source.connect(audioContext.destination);
+                // source.start(0, 0, 1);
             });
         });
 

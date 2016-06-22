@@ -1,0 +1,49 @@
+<script src="../../lib/WebModule.js"></script>
+<script src="../../lib/AAC.js"></script>
+<script src="../../lib/ADTS.js"></script>
+<script>
+var xhr = new XMLHttpRequest();
+xhr.responseType = "arraybuffer";
+xhr.onload = function() {
+    var AudioContext = window.AudioContext || window.webkitAudioContext;
+    var audioContext = new AudioContext();
+
+    var aac  = new Uint8Array(xhr.response);
+    var adts = WebModule.ADTS.parse(aac);
+    var blob = WebModule.ADTS.toBlob(aac, adts);
+
+    alert("adts duration:" + adts.duration);
+    // Mac Chrome 51: 5.061950113378685
+    // Mac Safari  9: 5.061950113378685
+
+    var reader = new FileReader();
+
+    reader.onload = function() {
+        var arrayBuffer = reader.result;
+
+        audioContext.decodeAudioData(arrayBuffer, function(audioBuffer) {
+            alert("audioBuffer duration: " + audioBuffer.duration);
+            // Mac Chrome 51: 7.238639455782313
+            // Mac Safari  9: 5.061950206756592
+
+            var currentTime = audioContext.currentTime;
+
+            var sourceNode = audioContext.createBufferSource();
+
+            sourceNode.buffer = audioBuffer; // set PCM Data
+            sourceNode.connect(audioContext.destination);
+            sourceNode.start(0, 0, adts.duration); // playback
+            sourceNode.onended = function() {
+              alert("elapsed time: " + (audioContext.currentTime - currentTime));
+              // Mac Chrome 51: 5.073560090702948
+              // Mac Safari  9: 5.061950113378685
+            };
+        });
+
+    };
+    reader.readAsArrayBuffer(blob);
+};
+xhr.open("GET", "./5s.aac");
+xhr.send();
+</script>
+

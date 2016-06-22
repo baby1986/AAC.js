@@ -15,27 +15,12 @@ This module made of [WebModule](https://github.com/uupaa/WebModule).
 ```js
 <script src="<module-dir>/lib/WebModule.js"></script>
 <script src="<module-dir>/lib/AAC.js"></script>
+<script src="<module-dir>/lib/ADTS.js"></script>
 <script>
 var stream = new Uint8Array(...);
 var adts = AAC.parse(stream);
 
 console.log( adts.duration );  // -> 5.410249433106576
 </script>
-```
-
-## WebWorkers
-
-```js
-importScripts("<module-dir>/lib/WebModule.js");
-importScripts("<module-dir>/lib/AAC.js");
-
-```
-
-## Node.js
-
-```js
-require("<module-dir>/lib/WebModule.js");
-require("<module-dir>/lib/AAC.js");
-
 ```
 
