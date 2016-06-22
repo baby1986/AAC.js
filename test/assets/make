@@ -18,3 +18,12 @@ ffmpeg -y -i mute.wav -acodec libfdk_aac -b:a 48k -profile:a aac_he    -ar 44100
 # mute.wav から HE-AAC v2 を作成する
 ffmpeg -y -i mute.wav -acodec libfdk_aac -b:a 48k -profile:a aac_he_v2 -ar 44100 mute2.aac
 
+# mute.mon.wav から AAC-LC を作成する
+ffmpeg -y -i mute.mon.wav -acodec libfdk_aac -b:a 48k                      -ar 44100 mute.mon.0.aac
+
+# mute.mon.wav から HE-AAC v1 を作成する
+ffmpeg -y -i mute.mon.wav -acodec libfdk_aac -b:a 48k -profile:a aac_he    -ar 44100 mute.mon.1.aac
+
+# mute.mon.wav から HE-AAC v2 を作成する -> エラーになるので削除
+# ffmpeg -y -i mute.mon.wav -acodec libfdk_aac -b:a 48k -profile:a aac_he_v2 -ar 44100 mute.mon.2.aac
+

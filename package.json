@@ -1,6 +1,6 @@
 {
   "name": "uupaa.aac.js",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "AAC-LC/HE-AAC parser.",
   "url": "https://github.com/uupaa/AAC.js",
   "keywords": ["AAC", "AAC-LC", "HE-AAC", "ADTS", "uupaa", "WebModule", "Unstable"],
@@ -31,8 +31,10 @@
     "setup": "node ../WebModule/run/setup.js",
     "start": "cd ../; Python -m SimpleHTTPServer 8000 &",
     "stop": "killall -- Python -m SimpleHTTPServer 8000; exit 0",
-    "make": "cd test/assets; ./make; cd -",
-    "clean": "rm test/assets/*.aac"
+    "pretest": "npm run assets:make",
+    "prepublish": "npm run assets:clean",
+    "assets:make": "cd test/assets; ./make; cd -",
+    "assets:clean": "rm test/assets/*.aac"
   },
   "webmodule": {
     "develop": false,
