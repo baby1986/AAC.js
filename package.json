@@ -1,6 +1,6 @@
 {
   "name": "uupaa.aac.js",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "AAC-LC/HE-AAC parser.",
   "url": "https://github.com/uupaa/AAC.js",
   "keywords": ["AAC", "AAC-LC", "HE-AAC", "ADTS", "uupaa", "WebModule", "Unstable"],
