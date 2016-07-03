@@ -78,7 +78,7 @@ function playV2() {
 }
 
 function playPakings() {
-    audioContext.decodeAudioData(ADTS.PACKING_A.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+    audioContext.decodeAudioData(AAC.AAC_44100_LR_2.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
         var source = audioContext.createBufferSource();
         var pcm = audioBuffer.getChannelData(0);
 
@@ -87,7 +87,7 @@ function playPakings() {
         source.loop = true;
         source.start(0);
 
-        audioContext.decodeAudioData(ADTS.PACKING_B.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+        audioContext.decodeAudioData(AAC.AAC_44100_LR_5.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
 
             var source = audioContext.createBufferSource();
             var pcm = audioBuffer.getChannelData(0);
@@ -97,7 +97,7 @@ function playPakings() {
             source.loop = true;
             source.start(0);
 
-            audioContext.decodeAudioData(ADTS.PACKING_C.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
+            audioContext.decodeAudioData(AAC.AAC_44100_LR_29.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
 
                 var source = audioContext.createBufferSource();
                 var pcm = audioBuffer.getChannelData(0);
@@ -121,7 +121,7 @@ function _play(files) {
             source.connect(audioContext.destination);
             source.start(0);
 
-            when += audioBuffer.duration;
+            //when += audioBuffer.duration;
         });
     });
 }
