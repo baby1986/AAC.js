@@ -7,7 +7,7 @@ AAC-LC/HE-AAC parser.
 This module made of [WebModule](https://github.com/uupaa/WebModule).
 
 ## Documentation
-- [Spec](https://github.com/uupaa/AAC.js/wiki/)
+- [Overview](https://github.com/uupaa/AAC.js/wiki/)
 - [API Spec](https://github.com/uupaa/AAC.js/wiki/AAC)
 
 ## Browser, NW.js and Electron

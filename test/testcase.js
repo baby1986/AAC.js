@@ -292,7 +292,7 @@ Channel layout: Mono
 
         var aacBitStream = new Uint8Array(arrayBuffer);
         var adts         = ADTS.parse(aacBitStream);
-        var blob         = ADTS.toBlob(aacBitStream, adts);
+        var blob         = ADTS.toBlob(aacBitStream, adts, { ESTIMATED_DURATION: AAC.ESTIMATED_DURATION });
         var adtsDuration = adts.duration;
 
         FileLoader.toArrayBuffer(blob, function(arrayBuffer) {
