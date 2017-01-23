@@ -30,6 +30,7 @@ onmessage = function(event) {
     importScripts("../wmtools.js");
     importScripts("../../lib/AAC.js");
     importScripts("../../lib/ADTS.js");
+    importScripts("../../lib/ADTSRawData.js");
     importScripts("../../release/AAC.w.min.js");
     importScripts("../testcase.js");
 

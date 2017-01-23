@@ -1,6 +1,6 @@
 {
   "name": "uupaa.aac.js",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "AAC-LC/HE-AAC parser.",
   "url": "https://github.com/uupaa/AAC.js",
   "keywords": ["AAC", "AAC-LC", "HE-AAC", "ADTS", "uupaa", "WebModule", "Unstable"],
@@ -43,35 +43,40 @@
       "output": "release/AAC.b.min.js",
       "source": [
         "lib/AAC.js",
-        "lib/ADTS.js"
+        "lib/ADTS.js",
+        "lib/ADTSRawData.js"
       ]
     },
     "worker": {
       "output": "release/AAC.w.min.js",
       "source": [
         "lib/AAC.js",
-        "lib/ADTS.js"
+        "lib/ADTS.js",
+        "lib/ADTSRawData.js"
       ]
     },
     "node": {
       "output": "release/AAC.n.min.js",
       "source": [
         "lib/AAC.js",
-        "lib/ADTS.js"
+        "lib/ADTS.js",
+        "lib/ADTSRawData.js"
       ]
     },
     "nw": {
       "output": "release/AAC.nw.min.js",
       "source": [
         "lib/AAC.js",
-        "lib/ADTS.js"
+        "lib/ADTS.js",
+        "lib/ADTSRawData.js"
       ]
     },
     "el": {
       "output": "release/AAC.el.min.js",
       "source": [
         "lib/AAC.js",
-        "lib/ADTS.js"
+        "lib/ADTS.js",
+        "lib/ADTSRawData.js"
       ]
     }
   },

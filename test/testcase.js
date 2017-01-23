@@ -24,6 +24,7 @@ if (IN_BROWSER || IN_NW || IN_EL) {
         testAAC_AAC_44100_LR_29,
         testAAC_AAC_LC_parse,
         testAAC_toBlob,
+        testADTSRawData_detectEncoder,
     ]);
 }
 
@@ -48,7 +49,7 @@ function testAAC_AAC_44100_LR_2(test, pass, miss) {
                                     if (f0.adtsFrameLength === 139) {
                                         if (f0.adtsHeaderLength === 7) {
                                             if (f0.crcLength === 0) {
-                                                if (f0.rawDataBlockLength === 139 - 7) {
+                                                if (f0.rawDataBlockEnd - f0.rawDataBlockStart === 139 - 7) {
                                                     audioContext.decodeAudioData(AAC.AAC_44100_LR_2.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
                                                         var pcm = audioBuffer.getChannelData(0); // Float32Array(2048)
 
@@ -100,7 +101,7 @@ function testAAC_AAC_44100_LR_5(test, pass, miss) {
                                     if (f0.adtsFrameLength === 278) {
                                         if (f0.adtsHeaderLength === 7) {
                                             if (f0.crcLength === 0) {
-                                                if (f0.rawDataBlockLength === 278 - 7) {
+                                                if (f0.rawDataBlockEnd - f0.rawDataBlockStart === 278 - 7) {
                                                     audioContext.decodeAudioData(AAC.AAC_44100_LR_5.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
                                                         var pcm = audioBuffer.getChannelData(0); // Float32Array(2048)
                                                         var max = Math.max.apply(null, pcm);
@@ -153,7 +154,7 @@ function testAAC_AAC_44100_LR_29(test, pass, miss) {
                                     if (f0.adtsFrameLength === 278) {
                                         if (f0.adtsHeaderLength === 7) {
                                             if (f0.crcLength === 0) {
-                                                if (f0.rawDataBlockLength === 278 - 7) {
+                                                if (f0.rawDataBlockEnd - f0.rawDataBlockStart === 278 - 7) {
                                                     audioContext.decodeAudioData(AAC.AAC_44100_LR_29.buffer, function(audioBuffer) { // @arg AudioBuffer - PCM data
                                                         var pcm = audioBuffer.getChannelData(0); // Float32Array(2048)
                                                         var max = Math.max.apply(null, pcm);
@@ -229,7 +230,7 @@ function testAAC_AAC_LC_parse(test, pass, miss) {
                                                 if (f0.adtsFrameLength === 139) {
                                                     if (f0.adtsHeaderLength === 7) {
                                                         if (f0.crcLength === 0) {
-                                                            if (f0.rawDataBlockLength === 139 - 7) {
+                                                            if (f0.rawDataBlockEnd - f0.rawDataBlockStart === 139 - 7) {
                                                                 test.done(pass());
                                                                 return;
                                                             }
@@ -319,6 +320,72 @@ Channel layout: Mono
         console.error(error.message);
         test.done(miss());
     });
+}
+
+function testADTSRawData_detectEncoder(test, pass, miss) {
+// Audacity で 0.046439909297052155 の無音の wave ファイル(0.0464.wav)を作成
+//
+// $ ffmpeg -y -i 0.0464.wav -ar 44100 0.0464.aac でaac に変換
+// > Input #0, wav, from '0.0464.wav':
+// >   Duration: 00:00:00.05, bitrate: 1424 kb/s
+// >     Stream #0:0: Audio: pcm_f32le ([3][0][0][0] / 0x0003), 44100 Hz, 1 channels, flt, 1411 kb/s
+// > Output #0, adts, to '0.0464.aac':
+// >   Metadata:
+// >     encoder         : Lavf57.25.100
+// >     Stream #0:0: Audio: aac (LC), 44100 Hz, mono, fltp, 69 kb/s
+// >     Metadata:
+// >       encoder         : Lavc57.24.102 aac
+// > Stream mapping:
+// >   Stream #0:0 -> #0:0 (pcm_f32le (native) -> aac (native))
+// > Press [q] to stop, [?] for help
+// > size=       0kB time=00:00:00.04 bitrate=   8.6kbits/s speed=  17x
+// > video:0kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 72.413795
+//
+// $ afinfo -r 0.0464.aac
+// > File:           0.0464.aac
+// > File type ID:   adts
+// > Num Tracks:     1
+// > ----
+// > Data format:     1 ch,  44100 Hz, 'aac ' (0x00000000) 0 bits/channel, 0 bytes/packet, 1024 frames/packet, 0 bytes/frame
+// > Channel layout: Mono
+// > audio bytes: 50
+// > audio packets: 3
+// > estimated duration: 0.070 sec
+// > bit rate: 5742 bits per second
+// > packet size upper bound: 768
+// > maximum packet size: 21
+// > audio data file offset: 0
+// > optimized
+// > format list:
+// > [ 0] format:	  1 ch,  44100 Hz, 'aac ' (0x00000000) 0 bits/channel, 0 bytes/packet, 1024 frames/packet, 0 bytes/frame
+// > Channel layout: Mono
+// > ----
+
+// AAC の先頭 frame の rawDataBlock に encoder の名前が格納されているのでそれを取得する
+
+    //                                    0 1 2 3 4 5 6 7 8 
+    var AAC_44100_MONO_2 = _toUint8Array("FFF15040039FFCDE02004C61766335372E32342E313032000230400EFFF15040017FFC01182007FFF15040017FFC01182007");
+                                                           // 4C61766335372E32342E313032 = Lavc57.24.102
+
+    var adts = ADTS.parse(AAC_44100_MONO_2);
+    var rawData = ADTSRawData.parse(adts, AAC_44100_MONO_2, { "maxElements": 1 });
+
+    if (rawData.encoder === "Lavc") {
+        test.done(pass());
+    } else {
+        test.done(miss());
+    }
+}
+
+function _toUint8Array(hexString) { // @arg HexString - "FFF1F0"
+                                    // @ret Uint8Array - new Uint8Array([0xff, 0xf1, 0xf0])
+    var result = new Uint8Array(hexString.length / 2);
+    var bytes = hexString.split("");
+
+    for (var i = 0, j = 0, iz = bytes.length; i < iz; i += 2, ++j) {
+        result[j] = parseInt(bytes[i] + bytes[i + 1], 16);
+    }
+    return result;
 }
 
 return test.run();

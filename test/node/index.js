@@ -18,6 +18,7 @@ require("../../node_modules/uupaa.hash.js/lib/Hash.js");
 require("../wmtools.js");
 require("../../lib/AAC.js");
 require("../../lib/ADTS.js");
+require("../../lib/ADTSRawData.js");
 require("../../release/AAC.n.min.js");
 require("../testcase.js");
 
